@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Wong Hoi Sing, Edison">
+  <meta name="dcterms.date" content="2026-06-01">
+  <title>Open Source Hong Kong Meetup</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^5/dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^5/dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^5/dist/theme/black.css" id="theme">
+  <style>
+      .reveal .slides {
+      text-align: left;
+    }
+    .reveal .slides section > * {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Open Source Hong Kong Meetup</h1>
+  <p class="subtitle">Transiting from Nginx Ingress to Envoy Gateway</p>
+  <p class="author">Wong Hoi Sing, Edison</p>
+  <p class="date">2026-06-01</p>
+</section>
+
+<section>
+<section id="introduction" class="title-slide slide level1">
+<h1>Introduction</h1>
+
+</section>
+<section id="get-the-code" class="slide level2">
+<h2>Get the Code</h2>
+<ul>
+<li><a
+href="https://github.com/hswong3i/transiting-from-nginx-ingress-to-envoy-gateway">GitHub
+Repo</a>: Source code</li>
+<li><a
+href="https://hswong3i.github.io/metrics-logs-traces-and-profiles-grafana-lgtm">GitHub
+Page</a>: Online <a href="https://revealjs.com/">reveal.js</a>,
+converted by <a href="https://pandoc.org">pandoc</a></li>
+<li><a href="index.pdf">index.pdf</a>: Offline PDF, converted by <a
+href="https://pandoc.org">pandoc</a></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><img data-src="files/qrcode.png" /></p>
+</section>
+<section id="about-me" class="slide level2">
+<h2>About Me</h2>
+<ul>
+<li>Wong Hoi Sing, Edison (hswong3i)</li>
+<li>2005: <a href="https://drupal.org/user/33940">Drupal, Developer
+&amp; Contributor</a></li>
+<li>2008: <a href="https://groups.drupal.org/drupalhk">HKDUG,
+Founder</a></li>
+<li>2010: <a href="https://pantarei-design.com">PantaRei Design,
+Founder</a></li>
+<li>2020: <a
+href="https://hkoscon.org/2020/topics/ansible-vm-kubernetes">HKOSCON
+2020, Speaker</a></li>
+<li>2021: <a
+href="https://landscape.cncf.io/?group=certified-partners-and-providers&amp;item=platform--certified-kubernetes-installer--alvistack-vagrant-box-packaging-for-kubernetes">AlviStack,
+Founder</a></li>
+<li>2022: <a href="https://2022.hkoscon.org/edisonwong">HKOSCON 2022,
+Speaker</a></li>
+<li>2024: <a
+href="https://github.com/gayanvoice/top-github-users/blob/main/markdown/total_contributions/hong_kong.md">Most
+Active GitHub user in Hong Kong</a></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><img data-src="files/20231022-062402-b9694589--dsc1528.jpg" /></p>
+</section>
+<section class="slide level2">
+
+<p><img data-src="files/5334654265-c16444a8b0-o.jpg" /></p>
+</section>
+<section class="slide level2">
+
+<p><img
+data-src="files/hkoscon-org-2020-topics-ansible-vm-kubernetes.png" /></p>
+</section>
+<section class="slide level2">
+
+<p><img data-src="files/landscape-cncf-io-alvistack.png" /></p>
+</section>
+<section class="slide level2">
+
+<p><img data-src="files/2022-hkoscon-org-edisonwong.png" /></p>
+</section>
+<section class="slide level2">
+
+<p><img
+data-src="files/github-com-gayanvoice-top-github-users.png" /></p>
+</section></section>
+<section>
+<section id="what-is-gateway-api" class="title-slide slide level1">
+<h1>What is Gateway API?</h1>
+
+</section>
+<section id="about-ingress-nginx" class="slide level2">
+<h2>About Ingress NGINX</h2>
+<ul>
+<li>Ingress is the original user-friendly way to direct network traffic
+to workloads running on Kubernetes</li>
+<li>In order for an Ingress to work in your cluster, there must be an
+Ingress controller running</li>
+<li>Ingress NGINX was an Ingress controller, one of the most popular,
+deployed as part of many hosted Kubernetes platforms</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><img data-src="files/kubernetes-github-io-ingress-nginx.png" /></p>
+</section></section>
+<section>
+<section id="qa" class="title-slide slide level1">
+<h1>Q&amp;A</h1>
+
+</section>
+<section id="contact-me" class="slide level2">
+<h2>Contact Me</h2>
+<ul>
+<li>Address: Unit 326, 3/F, Building 16W, No.16 Science Park West
+Avenue, Hong Kong Science Park, Shatin, N.T.</li>
+<li>Phone: +852 3576 3812</li>
+<li>Fax: +852 3753 3663</li>
+<li>Email: <a href="mailto:sales@pantarei-design.com"
+class="email">sales@pantarei-design.com</a></li>
+<li>Web: <a href="http://pantarei-design.com"
+class="uri">http://pantarei-design.com</a></li>
+</ul>
+</section></section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^5/dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^5/plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^5/plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^5/plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: true,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>

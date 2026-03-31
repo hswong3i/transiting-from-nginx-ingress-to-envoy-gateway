@@ -1,0 +1,24 @@
+---
+title: Open Source Hong Kong Meetup #97
+subtitle: Transiting from Nginx Ingress to Envoy Gateway
+author: Wong Hoi Sing, Edison
+date: 2026-06-01
+geometry:
+  - landscape
+classoption:
+  - landscape
+colorlinks: true
+slideNumber: true
+mainfont: Noto Sans
+CJKmainfont: Noto Sans CJK TC
+header-includes: |
+  <style>
+      .reveal .slides {
+      text-align: left;
+    }
+    .reveal .slides section > * {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  </style>
+---
