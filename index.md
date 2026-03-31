@@ -58,7 +58,65 @@
 
 ![](files/kubernetes-github-io-ingress-nginx.png)
 
+## Ingress NGINX Retirement
+
+- For years, the project has had only one or two people doing development work
+- Last year, the Ingress NGINX maintainers announced their plans to wind down Ingress NGINX
+- In March 2026, Ingress NGINX maintenance will be halted, and the project will be retired
+- Existing deployments of Ingress NGINX will not be broken
+
+------------------------------------------------------------------------
+
+![](files/kubernetes-io-blog-2025-11-11-ingress-nginx-retirement.png)
+
+## About Gateway API
+
+- Gateway API is an official Kubernetes project focused on L4 and L7 routing in Kubernetes
+- Next generation of Kubernetes Ingress, Load Balancing, and Service Mesh APIs
+- Designed to be generic, expressive, and role-oriented
+
+------------------------------------------------------------------------
+
+![](files/gateway-api-sigs-k8s-io.png)
+
+------------------------------------------------------------------------
+
+![](files/ingress-api-vs-gateway-api.png)
+
+------------------------------------------------------------------------
+
+![](files/gateway-api-performance.png)
+
+------------------------------------------------------------------------
+
+## About NGINX Gateway Fabric
+
+- NGINX Gateway Fabric provides an implementation of the Gateway API using NGINX as the data plane
+- HTTP or TCP/UDP load balancer, reverse proxy, or API gateway for Kubernetes applications
+
+------------------------------------------------------------------------
+
+![](files/docs-nginx-com-nginx-gateway-fabric.png)
+
+## About Envoy Gateway
+
+- Envoy Gateway is a Kubernetes-native API Gateway and reverse proxy control plane
+- Integrating tightly with Kubernetes through the Gateway API
+- Providing custom CRDs for advanced traffic policies
+- Automatically translating Kubernetes resources into Envoy config
+- Managing the lifecycle of Envoy Proxy instances
+
+------------------------------------------------------------------------
+
+![](files/gateway-envoyproxy-io.png)
+
 # Q&A
+
+## References
+
+- [Kubernetes Gateway API in 2026: The Definitive Guide to Envoy Gateway, Istio, Cilium and Kong](https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl)
+- [Kubernetes Gateway API 网关选型全景对比](https://zhuanlan.zhihu.com/p/1922971833201850292)
+- [生产级无坑指南：五分钟上手 Envoy Gateway，替代 Nginx Ingress 的终极方案！](https://www.51cto.com/article/835282.html)
 
 ## Contact Me
 
