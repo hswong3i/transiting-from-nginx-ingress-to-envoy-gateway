@@ -19,7 +19,8 @@
 - 2020: [HKOSCON 2020, Speaker](https://hkoscon.org/2020/topics/ansible-vm-kubernetes)
 - 2021: [AlviStack, Founder](https://landscape.cncf.io/?group=certified-partners-and-providers&item=platform--certified-kubernetes-installer--alvistack-vagrant-box-packaging-for-kubernetes)
 - 2022: [HKOSCON 2022, Speaker](https://2022.hkoscon.org/edisonwong)
-- 2024: [Most Active GitHub user in Hong Kong](https://github.com/gayanvoice/top-github-users/blob/main/markdown/total_contributions/hong_kong.md)
+- 2024: [HKOSCON 2024, Speaker](https://hkoscon.org/2024/topic/metrics-logs-traces-and-profiles-grafana-lgtm/)
+- 2026: [Most Active GitHub user in Hong Kong](https://github.com/gayanvoice/top-github-users/blob/main/markdown/total_contributions/hong_kong.md)
 
 ------------------------------------------------------------------------
 
