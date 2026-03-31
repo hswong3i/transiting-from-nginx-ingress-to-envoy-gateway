@@ -3,7 +3,7 @@
 ## Get the Code
 
 - [GitHub Repo](https://github.com/hswong3i/transiting-from-nginx-ingress-to-envoy-gateway): Source code
-- [GitHub Page](https://hswong3i.github.io/metrics-logs-traces-and-profiles-grafana-lgtm): Online [reveal.js](https://revealjs.com/), converted by [pandoc](https://pandoc.org)
+- [GitHub Page](https://hswong3i.github.io/transiting-from-nginx-ingress-to-envoy-gateway): Online [reveal.js](https://revealjs.com/), converted by [pandoc](https://pandoc.org)
 - [index.pdf](index.pdf): Offline PDF, converted by [pandoc](https://pandoc.org)
 
 ------------------------------------------------------------------------
