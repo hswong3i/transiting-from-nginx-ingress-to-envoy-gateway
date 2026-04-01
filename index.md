@@ -176,6 +176,105 @@
                     port:
                       number: 80
 
+------------------------------------------------------------------------
+
+![](files/molecule-verify-ansible-role-helm-ingress-nginx.png)
+
+------------------------------------------------------------------------
+
+![](files/molecule-verify-ansible-role-helm-ingress-nginx-result.png)
+
+# NGINX Gateway Fabric
+
+## Demo
+
+- Ansible Role for NGINX Gateway Fabric with Helm
+- Default with `hostNetwork: true`
+- Listen to TCP/80 and TCP/443
+- <https://github.com/alvistack/ansible-role-helm_nginx_gateway_fabric>
+
+------------------------------------------------------------------------
+
+![](files/github-com-alvistack-ansible-role-helm-nginx-gateway-fabric.png)
+
+------------------------------------------------------------------------
+
+    # Deploy the demo with Ansible + Vagrant + Kubernetes 1.35
+    sudo -E molecule converge -s kubernetes-1.35-libvirt
+
+    # Verify the deployment result
+    sudo -E molecule verify -s kubernetes-1.35-libvirt
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/charts/nginx-gateway-fabric.values.yaml
+    ---
+    nginx:
+      patches:
+        - type: StrategicMerge
+          value:
+            spec:
+              template:
+                spec:
+                  hostNetwork: true
+                  dnsPolicy: ClusterFirstWithHostNet
+                  securityContext:
+                    allowPrivilegeEscalation: true
+                    privileged: true
+                    sysctls: []
+                  containers:
+                    - name: nginx
+                      securityContext:
+                        allowPrivilegeEscalation: true
+                        privileged: true
+                        sysctls: []
+      service:
+        type: NodePort
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/namespaces/nginx-gateway/gateway-nginx-gateway.yml
+    ---
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    metadata:
+      name: nginx-gateway
+      namespace: nginx-gateway
+    spec:
+      gatewayClassName: nginx
+      allowedListeners:
+        namespaces:
+          from: All
+      listeners:
+        - name: http
+          protocol: HTTP
+          port: 80
+          allowedRoutes:
+            namespaces:
+              from: All
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/namespaces/default/httproute-nginx-gateway.yml
+    ---
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: nginx-gateway
+      namespace: default
+    spec:
+      parentRefs:
+        - name: nginx-gateway
+          namespace: nginx-gateway
+      rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /
+          backendRefs:
+            - name: nginx
+              port: 80
+
 # Q&A
 
 ## References

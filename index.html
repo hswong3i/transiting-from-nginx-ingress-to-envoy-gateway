@@ -298,6 +298,115 @@ spec:
                 name: nginx
                 port:
                   number: 80</code></pre>
+</section>
+<section class="slide level2">
+
+<p><img
+data-src="files/molecule-verify-ansible-role-helm-ingress-nginx.png" /></p>
+</section>
+<section class="slide level2">
+
+<p><img
+data-src="files/molecule-verify-ansible-role-helm-ingress-nginx-result.png" /></p>
+</section></section>
+<section>
+<section id="nginx-gateway-fabric" class="title-slide slide level1">
+<h1>NGINX Gateway Fabric</h1>
+
+</section>
+<section id="demo-1" class="slide level2">
+<h2>Demo</h2>
+<ul>
+<li>Ansible Role for NGINX Gateway Fabric with Helm</li>
+<li>Default with <code>hostNetwork: true</code></li>
+<li>Listen to TCP/80 and TCP/443</li>
+<li><a
+href="https://github.com/alvistack/ansible-role-helm_nginx_gateway_fabric"
+class="uri">https://github.com/alvistack/ansible-role-helm_nginx_gateway_fabric</a></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><img
+data-src="files/github-com-alvistack-ansible-role-helm-nginx-gateway-fabric.png" /></p>
+</section>
+<section class="slide level2">
+
+<pre><code># Deploy the demo with Ansible + Vagrant + Kubernetes 1.35
+sudo -E molecule converge -s kubernetes-1.35-libvirt
+
+# Verify the deployment result
+sudo -E molecule verify -s kubernetes-1.35-libvirt</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/charts/nginx-gateway-fabric.values.yaml
+---
+nginx:
+  patches:
+    - type: StrategicMerge
+      value:
+        spec:
+          template:
+            spec:
+              hostNetwork: true
+              dnsPolicy: ClusterFirstWithHostNet
+              securityContext:
+                allowPrivilegeEscalation: true
+                privileged: true
+                sysctls: []
+              containers:
+                - name: nginx
+                  securityContext:
+                    allowPrivilegeEscalation: true
+                    privileged: true
+                    sysctls: []
+  service:
+    type: NodePort</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/namespaces/nginx-gateway/gateway-nginx-gateway.yml
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: nginx-gateway
+  namespace: nginx-gateway
+spec:
+  gatewayClassName: nginx
+  allowedListeners:
+    namespaces:
+      from: All
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/namespaces/default/httproute-nginx-gateway.yml
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nginx-gateway
+  namespace: default
+spec:
+  parentRefs:
+    - name: nginx-gateway
+      namespace: nginx-gateway
+  rules:
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
+      backendRefs:
+        - name: nginx
+          port: 80</code></pre>
 </section></section>
 <section>
 <section id="qa" class="title-slide slide level1">
