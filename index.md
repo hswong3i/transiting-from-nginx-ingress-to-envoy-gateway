@@ -117,6 +117,65 @@
 - <https://docs.nginx.com/nginx-gateway-fabric>
 - <https://gateway.envoyproxy.io>
 
+# Ingress NGINX
+
+## Demo
+
+- Ansible Role for NGINX Ingress Controller with Helm
+- Default with `hostNetwork: true`
+- Listen to TCP/80 and TCP/443
+- <https://github.com/alvistack/ansible-role-helm_ingress_nginx>
+
+------------------------------------------------------------------------
+
+![](files/github-com-alvistack-ansible-role-helm-ingress-nginx.png)
+
+------------------------------------------------------------------------
+
+    # Deploy the demo with Ansible + Vagrant + Kubernetes 1.35
+    sudo -E molecule converge -s kubernetes-1.35-libvirt
+
+    # Verify the deployment result
+    sudo -E molecule verify -s kubernetes-1.35-libvirt
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/charts/ingress-nginx.values.yaml
+    ---
+    controller:
+      dnsPolicy: ClusterFirstWithHostNet
+      reportNodeInternalIp: true
+      hostNetwork: true
+      hostPort:
+        enabled: true
+        ports:
+          http: 80
+          https: 443
+      service:
+        type: NodePort
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/namespaces/default/ingress-nginx.yml
+    ---
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: ingress-nginx
+      namespace: default
+    spec:
+      ingressClassName: nginx
+      rules:
+        - http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: nginx
+                    port:
+                      number: 80
+
 # Q&A
 
 ## References

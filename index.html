@@ -233,6 +233,73 @@ class="uri">https://gateway.envoyproxy.io</a></li>
 </ul>
 </section></section>
 <section>
+<section id="ingress-nginx" class="title-slide slide level1">
+<h1>Ingress NGINX</h1>
+
+</section>
+<section id="demo" class="slide level2">
+<h2>Demo</h2>
+<ul>
+<li>Ansible Role for NGINX Ingress Controller with Helm</li>
+<li>Default with <code>hostNetwork: true</code></li>
+<li>Listen to TCP/80 and TCP/443</li>
+<li><a
+href="https://github.com/alvistack/ansible-role-helm_ingress_nginx"
+class="uri">https://github.com/alvistack/ansible-role-helm_ingress_nginx</a></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><img
+data-src="files/github-com-alvistack-ansible-role-helm-ingress-nginx.png" /></p>
+</section>
+<section class="slide level2">
+
+<pre><code># Deploy the demo with Ansible + Vagrant + Kubernetes 1.35
+sudo -E molecule converge -s kubernetes-1.35-libvirt
+
+# Verify the deployment result
+sudo -E molecule verify -s kubernetes-1.35-libvirt</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/charts/ingress-nginx.values.yaml
+---
+controller:
+  dnsPolicy: ClusterFirstWithHostNet
+  reportNodeInternalIp: true
+  hostNetwork: true
+  hostPort:
+    enabled: true
+    ports:
+      http: 80
+      https: 443
+  service:
+    type: NodePort</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/namespaces/default/ingress-nginx.yml
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx
+                port:
+                  number: 80</code></pre>
+</section></section>
+<section>
 <section id="qa" class="title-slide slide level1">
 <h1>Q&amp;A</h1>
 
