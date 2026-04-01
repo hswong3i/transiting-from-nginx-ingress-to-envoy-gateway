@@ -4,7 +4,6 @@
 
 - [GitHub Repo](https://github.com/hswong3i/transiting-from-nginx-ingress-to-envoy-gateway): Source code
 - [GitHub Page](https://hswong3i.github.io/transiting-from-nginx-ingress-to-envoy-gateway): Online [reveal.js](https://revealjs.com/), converted by [pandoc](https://pandoc.org)
-- [index.pdf](index.pdf): Offline PDF, converted by [pandoc](https://pandoc.org)
 
 ------------------------------------------------------------------------
 
@@ -110,17 +109,25 @@
 
 ![](files/gateway-envoyproxy-io.png)
 
+## References
+
+- <https://kubernetes.github.io/ingress-nginx>
+- <https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement>
+- <https://gateway-api.sigs.k8s.io>
+- <https://docs.nginx.com/nginx-gateway-fabric>
+- <https://gateway.envoyproxy.io>
+
 # Q&A
 
 ## References
 
-- [Kubernetes Gateway API in 2026: The Definitive Guide to Envoy Gateway, Istio, Cilium and Kong](https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl)
-- [Kubernetes Gateway API 网关选型全景对比](https://zhuanlan.zhihu.com/p/1922971833201850292)
-- [生产级无坑指南：五分钟上手 Envoy Gateway，替代 Nginx Ingress 的终极方案！](https://www.51cto.com/article/835282.html)
+- <https://dev.to/mechcloud_academy/kubernetes-gateway-api-in-2026-the-definitive-guide-to-envoy-gateway-istio-cilium-and-kong-2bkl>
+- <https://zhuanlan.zhihu.com/p/1922971833201850292>
+- <https://www.51cto.com/article/835282.html>
 
 ## Contact Me
 
-- Address: Unit 326, 3/F, Building 16W, No.16 Science Park West Avenue, Hong Kong Science Park, Shatin, N.T.
+- Address: Room 547-21, 5/F Building 19W, 19 Science Park West Avenue, Hong Kong Science Park, Shatin, N.T.
 - Phone: +852 3576 3812
 - Fax: +852 3753 3663
 - Email: <sales@pantarei-design.com>
