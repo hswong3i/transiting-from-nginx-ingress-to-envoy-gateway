@@ -275,6 +275,19 @@
             - name: nginx
               port: 80
 
+# Envoy Gateway
+
+## Demo
+
+- Ansible Role for Envoy Gateway with Helm
+- (WIP) Default with `hostNetwork: true`
+- (WIP) Listen to TCP/80 and TCP/443
+- <https://github.com/alvistack/ansible-role-helm_envoy_gateway>
+
+------------------------------------------------------------------------
+
+![](files/github-com-alvistack-ansible-role-helm-envoy-gateway.png)
+
 # Q&A
 
 ## References
