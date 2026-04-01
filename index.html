@@ -417,8 +417,9 @@ spec:
 <h2>Demo</h2>
 <ul>
 <li>Ansible Role for Envoy Gateway with Helm</li>
-<li>(WIP) Default with <code>hostNetwork: true</code></li>
-<li>(WIP) Listen to TCP/80 and TCP/443</li>
+<li>(WIP, default with LoadBalancer) Default with
+<code>hostNetwork: true</code></li>
+<li>(WIP, default with TCP/3xxxx) Listen to TCP/80 and TCP/443</li>
 <li><a
 href="https://github.com/alvistack/ansible-role-helm_envoy_gateway"
 class="uri">https://github.com/alvistack/ansible-role-helm_envoy_gateway</a></li>
@@ -428,6 +429,66 @@ class="uri">https://github.com/alvistack/ansible-role-helm_envoy_gateway</a></li
 
 <p><img
 data-src="files/github-com-alvistack-ansible-role-helm-envoy-gateway.png" /></p>
+</section>
+<section class="slide level2">
+
+<pre><code># Deploy the demo with Ansible + Vagrant + Kubernetes 1.35
+sudo -E molecule converge -s kubernetes-1.35-libvirt
+
+# Verify the deployment result
+sudo -E molecule verify -s kubernetes-1.35-libvirt</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/namespacce/envoy-gateway-system/gatewayclass-envoy-gateway.yml
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/namespaces/envoy-gateway-system/gateway-envoy-gateway.yml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: envoy-gateway
+  namespace: envoy-gateway-system
+spec:
+  gatewayClassName: envoy-gateway
+  allowedListeners:
+    namespaces:
+      from: All
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All</code></pre>
+</section>
+<section class="slide level2">
+
+<pre><code># /etc/kubernetes/namespaces/default/httproute-envoy-gateway.yml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: envoy-gateway
+  namespace: default
+spec:
+  parentRefs:
+    - name: envoy-gateway
+      namespace: envoy-gateway-system
+  rules:
+    - matches:
+      - path:
+          type: PathPrefix
+          value: /
+      backendRefs:
+        - name: nginx
+          port: 80</code></pre>
 </section></section>
 <section>
 <section id="qa" class="title-slide slide level1">

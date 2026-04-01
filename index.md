@@ -280,13 +280,73 @@
 ## Demo
 
 - Ansible Role for Envoy Gateway with Helm
-- (WIP) Default with `hostNetwork: true`
-- (WIP) Listen to TCP/80 and TCP/443
+- (WIP, default with LoadBalancer) Default with `hostNetwork: true`
+- (WIP, default with TCP/3xxxx) Listen to TCP/80 and TCP/443
 - <https://github.com/alvistack/ansible-role-helm_envoy_gateway>
 
 ------------------------------------------------------------------------
 
 ![](files/github-com-alvistack-ansible-role-helm-envoy-gateway.png)
+
+------------------------------------------------------------------------
+
+    # Deploy the demo with Ansible + Vagrant + Kubernetes 1.35
+    sudo -E molecule converge -s kubernetes-1.35-libvirt
+
+    # Verify the deployment result
+    sudo -E molecule verify -s kubernetes-1.35-libvirt
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/namespacce/envoy-gateway-system/gatewayclass-envoy-gateway.yml
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: GatewayClass
+    metadata:
+      name: envoy-gateway
+    spec:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/namespaces/envoy-gateway-system/gateway-envoy-gateway.yml
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    metadata:
+      name: envoy-gateway
+      namespace: envoy-gateway-system
+    spec:
+      gatewayClassName: envoy-gateway
+      allowedListeners:
+        namespaces:
+          from: All
+      listeners:
+        - name: http
+          protocol: HTTP
+          port: 80
+          allowedRoutes:
+            namespaces:
+              from: All
+
+------------------------------------------------------------------------
+
+    # /etc/kubernetes/namespaces/default/httproute-envoy-gateway.yml
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: envoy-gateway
+      namespace: default
+    spec:
+      parentRefs:
+        - name: envoy-gateway
+          namespace: envoy-gateway-system
+      rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /
+          backendRefs:
+            - name: nginx
+              port: 80
 
 # Q&A
 
